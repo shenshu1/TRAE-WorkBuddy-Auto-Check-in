@@ -1,0 +1,27 @@
+name: WorkBuddy Daily Check-in
+
+# 想要准点可加外部触发，见 GUIDE.md「二、准点触发」
+on:
+  schedule:
+    - cron: '13 2 * * *'  # UTC 2:13 = 北京 10:13（错开整点高峰）
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workbuddy-checkin
+  cancel-in-progress: false
+
+jobs:
+  checkin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run check-in
+        env:
+          WORKBUDDY_ACCESS_TOKEN: ${{ secrets.WORKBUDDY_ACCESS_TOKEN }}
+          WORKBUDDY_UID: ${{ secrets.WORKBUDDY_UID }}
+        run: python3 workbuddy_checkin.py
