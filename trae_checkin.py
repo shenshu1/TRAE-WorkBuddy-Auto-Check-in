@@ -85,7 +85,7 @@ def main():
     if code != 200:
         print('ERROR status 接口失败，token 可能过期')
         sys.exit(1)
-    if status.get('checked_in'):
+    if status.get('did_checked_in'):
         print(f"SKIP 今日已签到（积分 {status.get('credits')}），无需重复")
         return
     if not status.get('enable'):
